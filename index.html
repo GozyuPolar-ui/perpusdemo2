@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Login Perpustakaan</title>
+<style>
+  body{font-family:Segoe UI,Arial,sans-serif;background:url('https://i.pinimg.com/originals/02/b1/ae/02b1aedd8861c946b2fb327f2849fccf.jpg') center/cover no-repeat;height:100vh;margin:0;display:flex;align-items:center;justify-content:center;}
+  .card{background:rgba(255,255,255,0.2);backdrop-filter:blur(12px);padding:30px;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,0.3);width:320px;text-align:center;color:white;}
+  h2{margin-bottom:20px;color:#fff;}
+  input{width:100%;padding:10px;margin:8px 0;border:1px solid #ccc;border-radius:6px;}
+  button{width:100%;padding:10px;margin-top:12px;background:#2563eb;color:white;font-weight:bold;border:none;border-radius:6px;cursor:pointer;}
+  button:hover{background:#1e40af;}
+  .error{color:#f87171;margin-top:10px;font-size:14px;}
+  .options{display:flex;justify-content:space-between;align-items:center;font-size:14px;margin-top:8px;}
+  .link{color:#93c5fd;cursor:pointer;text-decoration:underline;}
+  .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);justify-content:center;align-items:center;}
+  .modal-content{background:white;color:#111;padding:20px;border-radius:10px;width:320px;text-align:left;}
+  .modal h3{margin-top:0;color:#2563eb;}
+</style>
+</head>
+<body>
+  <div class="card">
+    <h2>🔑 Login</h2>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <div class="options">
+      <label><input type="checkbox" id="remember"> Remember me</label>
+      <span class="link" onclick="openForgot()">Lupa password?</span>
+    </div>
+    <button onclick="login()">Masuk</button>
+    <div id="error" class="error"></div>
+  </div>
+
+  <!-- Modal lupa password -->
+  <div id="forgotModal" class="modal">
+    <div class="modal-content">
+      <h3>🔒 Lupa Password</h3>
+      <p>Silakan hubungi admin perpustakaan atau reset langsung di bagian pengaturan akun Anda.</p>
+      <button onclick="closeForgot()">Tutup</button>
+    </div>
+  </div>
+
+<script>
+  const admin={username:"raymond",password:"admin123"};
+  const members=[
+    {username:"raymond",password:"member123"},
+    {username:"ryani",password:"member123"}
+  ];
+
+  window.onload=()=>{
+    if(localStorage.getItem("rememberUser")){
+      document.getElementById("username").value=localStorage.getItem("rememberUser");
+      document.getElementById("remember").checked=true;
+    }
+  }
+
+  function login(){
+    const user=document.getElementById("username").value.trim();
+    const pass=document.getElementById("password").value.trim();
+    const error=document.getElementById("error");
+    if(user===admin.username && pass===admin.password){
+      if(document.getElementById("remember").checked){localStorage.setItem("rememberUser",user);}else{localStorage.removeItem("rememberUser");}
+      window.location.href="website.html";
+    } else if(members.some(m=>m.username===user && m.password===pass)){
+      if(document.getElementById("remember").checked){localStorage.setItem("rememberUser",user);}else{localStorage.removeItem("rememberUser");}
+      window.location.href="member.html";
+    } else {
+      error.textContent="❌ Username atau password salah!";
+    }
+  }
+
+  function openForgot(){document.getElementById("forgotModal").style.display="flex";}
+  function closeForgot(){document.getElementById("forgotModal").style.display="none";}
+</script>
+</body>
+</html>
